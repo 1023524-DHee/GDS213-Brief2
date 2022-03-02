@@ -16,4 +16,10 @@ public class CardPositions : MonoBehaviour
     {
         current = this;
     }
+
+    public Quaternion GetFaceDownRotation(int index)
+    {
+        Quaternion faceDownRotation = dealerPositions[index].rotation;
+        return Quaternion.Euler(-90f, faceDownRotation.eulerAngles.y, faceDownRotation.eulerAngles.z);
+    }
 }

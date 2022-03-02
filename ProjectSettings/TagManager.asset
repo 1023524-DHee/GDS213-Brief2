@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Player_E
+  - Player_S
+  - Player_W
+  - Canvas
   layers:
   - Default
   - TransparentFX
