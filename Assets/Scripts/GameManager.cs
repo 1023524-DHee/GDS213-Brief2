@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     private int _numPlayers;
     private int[] _playerBets = new int[3];
     private bool[] _playerHasBet = new bool[3];
+    private int[] _payout = new int[3];
     private int _numBetsPlaced;
     
     private GameState _currentGameState;
@@ -62,11 +63,11 @@ public class GameManager : MonoBehaviour
                 break;
             case Player.PlayerPositions.S:
                 _playerBets[1] = amount;
-                _playerHasBet[0] = true;
+                _playerHasBet[1] = true;
                 break;
             case Player.PlayerPositions.W:
                 _playerBets[2] = amount;
-                _playerHasBet[0] = true;
+                _playerHasBet[2] = true;
                 break;
         }
 
@@ -99,11 +100,11 @@ public class GameManager : MonoBehaviour
             {
                 if (ii == 1 && player.playerPosition == Player.PlayerPositions.N)
                 {
-                    DealCardFaceDown(player);
+                    //DealCardFaceDown(player);
                 }
                 else
                 {
-                    DealCard(player);
+                   // DealCard(player);
                 }
                 
                 yield return new WaitForSeconds(0.25f);
@@ -112,8 +113,6 @@ public class GameManager : MonoBehaviour
         
         PlayPhase();
     }
-    
-    
     #endregion
     
     #region Play Phase
@@ -148,31 +147,19 @@ public class GameManager : MonoBehaviour
                 PlayPhase();
                 break;
             case Player.PlayerPositions.W:
-                EndPhase();
+                //DealerPlay();
                 break;
         }
     }
     #endregion
     
     #region End Phase
-    public void EndPhase()
+    private void EndPhase()
     {
         _currentGameState = GameState.End;
     }
     #endregion
 
-    #region Card Dealing Functions
-    public void DealCard(Player player)
-    {
-        player.GetCard(cardTracker.DealCard(player.GetCurrentCardPosition(), player.GetCurrentCardRotation()));
-    }
-
-    private void DealCardFaceDown(Player player)
-    {
-        player.GetCard(cardTracker.DealFaceDownCard(player.GetCurrentCardPosition(), player.GetCurrentFaceDownCardRotation()));
-    }
-    #endregion
-    
     public GameState GetCurrentGameState()
     {
         return _currentGameState;

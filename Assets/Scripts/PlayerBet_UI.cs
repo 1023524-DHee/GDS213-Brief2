@@ -8,6 +8,6 @@ public class PlayerBet_UI : MonoBehaviour
     
     public void PlaceBet(int amount)
     {
-        GameObject.FindGameObjectWithTag("Player_E").GetComponent<Player>().BetAmount(amount);
+        GameObject.FindGameObjectWithTag("Player_S").GetComponent<Player>().BetAmount(amount);
     }
 }

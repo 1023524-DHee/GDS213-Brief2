@@ -39,4 +39,29 @@ public class Card : MonoBehaviour
         transform.position = position;
         transform.rotation = rotation;
     }
+
+    public void FlipCard()
+    {
+        StartCoroutine(FlipCard_Coroutine());
+    }
+
+    private IEnumerator FlipCard_Coroutine()
+    {
+        float startTime = Time.time;
+        Quaternion initialCardRotation = transform.rotation;
+        Quaternion finalCardRotation = Quaternion.Euler(initialCardRotation.eulerAngles.x + 180,0,0);
+        
+        while (Time.time < startTime + 0.75f)
+        {
+            transform.rotation = Quaternion.Lerp(initialCardRotation, finalCardRotation, (Time.time - startTime) / 0.75f);
+            yield return null;
+        }
+
+        transform.rotation = finalCardRotation;
+    }
+
+    public void RemoveCard()
+    {
+        Destroy(gameObject);
+    }
 }

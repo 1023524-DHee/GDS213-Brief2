@@ -8,44 +8,55 @@ public class CardTracker : MonoBehaviour
 {
     public List<GameObject> deckOfCards;
 
+    private List<GameObject> _inUseDeck;
+    
     private void Awake()
     {
+        _inUseDeck = new List<GameObject>();
         ShuffleDeck();
     }
 
-    public int DealCard(Vector3 position, Quaternion rotation)
+    public Card DealCard(Vector3 position, Quaternion rotation)
     {
-        GameObject dealtCard = Instantiate(deckOfCards[0]);
+        GameObject dealtCard = Instantiate(_inUseDeck[0]);
         dealtCard.transform.position = transform.position;
-        deckOfCards.RemoveAt(0);
+        _inUseDeck.RemoveAt(0);
 
         Card card = dealtCard.GetComponent<Card>();
         card.CardPlayed(position, rotation);
 
-        return card.cardValue;
+        return card;
     }
 
-    public int DealFaceDownCard(Vector3 position, Quaternion rotation)
+    public Card DealFaceDownCard(Vector3 position, Quaternion rotation)
     {
-        GameObject dealtCard = Instantiate(deckOfCards[0]);
+        GameObject dealtCard = Instantiate(_inUseDeck[0]);
         dealtCard.transform.position = transform.position;
         dealtCard.transform.Rotate(new Vector3(180f, 0f));
-        deckOfCards.RemoveAt(0);
+        _inUseDeck.RemoveAt(0);
 
         Card card = dealtCard.GetComponent<Card>();
         card.CardPlayed(position, rotation);
         
-        return card.cardValue;
+        return card;
     }
 
     private void ShuffleDeck()
     {
-        for (int i = 0; i < deckOfCards.Count; i++) 
+        if (_inUseDeck.Count == 0)
         {
-            GameObject temp = deckOfCards[i];
-            int randomIndex = Random.Range(i, deckOfCards.Count);
-            deckOfCards[i] = deckOfCards[randomIndex];
-            deckOfCards[randomIndex] = temp;
+            foreach (GameObject card in deckOfCards)
+            {
+                _inUseDeck.Add(card);
+            }
+        }
+        
+        for (int i = 0; i < _inUseDeck.Count; i++) 
+        {
+            GameObject temp = _inUseDeck[i];
+            int randomIndex = Random.Range(i, _inUseDeck.Count);
+            _inUseDeck[i] = _inUseDeck[randomIndex];
+            _inUseDeck[randomIndex] = temp;
         }
     }
 }
