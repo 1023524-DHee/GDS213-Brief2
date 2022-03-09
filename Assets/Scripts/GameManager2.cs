@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class GameManager2 : MonoBehaviour
@@ -24,12 +25,16 @@ public class GameManager2 : MonoBehaviour
     public CardPositions cardPositions;
     public CardTracker cardTracker;
     public List<Player> listOfPlayers;
+    public bool isCardCountingTutorial;
 
     private GameState _currentGameState;
 
+    private int _totalCardCount;
     private int _numBetsPlaced;
     private int[] _playerBets = new int[3];
     private int[] _playerPayouts = new int[3];
+
+    private Answer_UI _answerUI;
     
     private List<Card> _nCardsList;
     private List<Card> _eCardsList;
@@ -40,6 +45,8 @@ public class GameManager2 : MonoBehaviour
     {
         current = this;
 
+        _answerUI = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Answer_UI>();
+        
         _nCardsList = new List<Card>();
         _eCardsList = new List<Card>();
         _sCardsList = new List<Card>();
@@ -48,9 +55,111 @@ public class GameManager2 : MonoBehaviour
 
     private void Start()
     {
-        StartBetPhase();
+        if (isCardCountingTutorial) StartCardCountingPhase();
+        else StartBetPhase();
     }
 
+    #region Card Counting
+
+    private int CardCounts(Player.PlayerPositions playerPositions)
+    {
+        int cardCountValue = 0;
+        List<Card> handToCheck = new List<Card>();
+        
+        switch(playerPositions)
+        {
+            case Player.PlayerPositions.N:
+                handToCheck = _nCardsList;
+                break;
+            case Player.PlayerPositions.E:
+                handToCheck = _eCardsList;
+                break;
+            case Player.PlayerPositions.S:
+                handToCheck = _sCardsList;
+                break;
+            case Player.PlayerPositions.W:
+                handToCheck = _wCardsList;
+                break;
+        }
+
+        foreach (Card card in handToCheck)
+        {
+            cardCountValue += card._cardCountValue;
+        }
+
+        return cardCountValue;
+    }
+    #endregion
+    
+    #region Card Counting Phases
+
+    private void StartCardCountingPhase()
+    {
+        StartCoroutine(CardCountDeal_Coroutine());
+    }
+    
+    private IEnumerator CardCountDeal_Coroutine()
+    {
+        for (int ii = 0; ii < 2; ii++)
+        {
+            foreach (Player player in listOfPlayers)
+            {
+                DealCard(player.playerPosition);
+                yield return new WaitForSeconds(0.25f);
+            }
+        }
+
+        _totalCardCount = GetTotalCount();
+        Debug.Log(_totalCardCount);
+        _answerUI.ShowUI();
+    }
+
+    public void CardCountEnd(int answer)
+    {
+        if (_totalCardCount == answer) CorrectAnswer();
+        else WrongAnswer();
+    }
+
+    private void CorrectAnswer()
+    {
+        Debug.Log("Right");
+        StartCoroutine(CardCountEnd_Coroutine());
+    }
+
+    private void WrongAnswer()
+    {
+        Debug.Log("Wrong");
+        StartCoroutine(CardCountEnd_Coroutine());
+    }
+
+    private IEnumerator CardCountEnd_Coroutine()
+    {
+        yield return new WaitForSeconds(2.5f);
+        for (int ii = 0; ii < 4; ii++)
+        {
+            List<Card> hand = new List<Card>();
+            if (ii == 0) hand = _nCardsList;
+            if (ii == 1) hand = _eCardsList;
+            if (ii == 2) hand = _sCardsList;
+            if (ii == 3) hand = _wCardsList;
+
+            foreach (Card card in hand)
+            {
+                card.RemoveCard();
+                yield return new WaitForSeconds(0.2f);
+            }
+            hand.Clear();
+        }
+        
+        StartCardCountingPhase();
+    }
+    
+    private int GetTotalCount()
+    {
+        return CardCounts(Player.PlayerPositions.N) + CardCounts(Player.PlayerPositions.E) + CardCounts(Player.PlayerPositions.S) + CardCounts(Player.PlayerPositions.W);
+    }
+    #endregion
+    
     #region Bet Phase
     private void StartBetPhase()
     {
@@ -184,11 +293,6 @@ public class GameManager2 : MonoBehaviour
         int sHandValue = GetHandValues(Player.PlayerPositions.S);
         int wHandValue = GetHandValues(Player.PlayerPositions.W);
 
-        Debug.Log(dealerHandValue);
-        Debug.Log(eHandValue);
-        Debug.Log(sHandValue);
-        Debug.Log(wHandValue);
-        
         if (dealerHandValue <= 21)
         {
             for (int ii = 0; ii < 3; ii++)
@@ -221,16 +325,15 @@ public class GameManager2 : MonoBehaviour
 
         for (int ii = 0; ii < 3; ii++)
         {
-            //Debug.Log(_playerPayouts[ii]);
             listOfPlayers[ii + 1].GainMoney(_playerPayouts[ii]);
         }
-        
+
         StartCoroutine(RemoveCards());
     }
 
     private IEnumerator RemoveCards()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2.5f);
         for (int ii = 0; ii < 4; ii++)
         {
             List<Card> hand = new List<Card>();

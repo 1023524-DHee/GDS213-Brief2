@@ -9,6 +9,7 @@ public class CardTracker : MonoBehaviour
     public List<GameObject> deckOfCards;
 
     private List<GameObject> _inUseDeck;
+    private int _deckCount;
     
     private void Awake()
     {
@@ -43,6 +44,8 @@ public class CardTracker : MonoBehaviour
 
     private void ShuffleDeck()
     {
+        _deckCount++;
+        
         if (_inUseDeck.Count == 0)
         {
             foreach (GameObject card in deckOfCards)

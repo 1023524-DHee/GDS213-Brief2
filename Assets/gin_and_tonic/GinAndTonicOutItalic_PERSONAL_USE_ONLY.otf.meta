@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 724d71b79d06582499dac421c37033ce
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Gin And Tonic Out PERSONAL
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: a12151d046825484ea6c5f5ae08a1da3, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

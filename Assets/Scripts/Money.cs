@@ -17,6 +17,7 @@ public class Money : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager2.current.isCardCountingTutorial) return;
         _textbox.text = "" + _player.currentMoney;
     }
 }

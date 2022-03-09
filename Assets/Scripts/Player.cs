@@ -17,7 +17,8 @@ public class Player : MonoBehaviour
     public PlayerPositions playerPosition;
     public bool isHumanPlayer;
     public int currentMoney;
-    
+
+    private PlayerAction_UI _playerActionUI;
     private PlayerBet_UI _playerBetUI;
     private List<int> _playerCards;
     private List<Transform> _cardPositions;
@@ -27,21 +28,7 @@ public class Player : MonoBehaviour
     {
         _playerCards = new List<int>();
         _playerBetUI = GameObject.FindGameObjectWithTag("Canvas").GetComponent<PlayerBet_UI>();
-    }
-    
-    private void Update()
-    {
-        if (!isHumanPlayer) return;
-        
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Hit();
-        }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Stand();
-        }
+        _playerActionUI = GameObject.FindGameObjectWithTag("Canvas").GetComponent<PlayerAction_UI>();
     }
 
     #region Bet Phase Functions
@@ -72,6 +59,7 @@ public class Player : MonoBehaviour
         _isPlayerTurn = true;
         
         if(!isHumanPlayer) GetComponent<Player_AI>().TakePlayTurn();
+        else if(isHumanPlayer) _playerActionUI.ShowUI();
     }
     
     public void Hit()
@@ -83,6 +71,7 @@ public class Player : MonoBehaviour
     {
         GameManager2.current.PlayerStand(playerPosition);
         _isPlayerTurn = false;
+        if(isHumanPlayer) _playerActionUI.HideUI();
     }
     #endregion
 

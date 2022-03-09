@@ -7,10 +7,25 @@ public class Card : MonoBehaviour
 {
     public int cardValue;
 
+    public int _cardCountValue;
+    
     private void Awake()
     {
         string[] stringValue = name.Split('_');
         cardValue = int.Parse(stringValue[0]);
+
+        if (cardValue is >= 2 and <= 6)
+        {
+            _cardCountValue = 1;
+        }
+        else if (cardValue is > 6 and <= 9)
+        {
+            _cardCountValue = 0;
+        }
+        else if (cardValue is 1 or > 9)
+        {
+            _cardCountValue = -1;
+        }
         
         if(cardValue > 10)
         {
