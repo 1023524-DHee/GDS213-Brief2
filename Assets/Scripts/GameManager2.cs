@@ -110,7 +110,6 @@ public class GameManager2 : MonoBehaviour
         }
 
         _totalCardCount = GetTotalCount();
-        Debug.Log(_totalCardCount);
         _answerUI.ShowUI();
     }
 
@@ -122,13 +121,14 @@ public class GameManager2 : MonoBehaviour
 
     private void CorrectAnswer()
     {
-        Debug.Log("Right");
+        ChipInstantiation.current.SpawnChips(50);
+        Result_UI.current.CorrectAnimation();
         StartCoroutine(CardCountEnd_Coroutine());
     }
 
     private void WrongAnswer()
     {
-        Debug.Log("Wrong");
+        Result_UI.current.WrongAnimation();
         StartCoroutine(CardCountEnd_Coroutine());
     }
 

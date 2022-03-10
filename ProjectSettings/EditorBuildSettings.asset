@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 458f59a4b4172ed4cb2a2b794a78e622
+  - enabled: 1
+    path: Assets/Scenes/CardCountingScene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Blackjack Scene.unity
+    guid: c12a252f34c0db841b2694284edc7003
   m_configObjects: {}

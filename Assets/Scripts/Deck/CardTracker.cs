@@ -19,6 +19,8 @@ public class CardTracker : MonoBehaviour
 
     public Card DealCard(Vector3 position, Quaternion rotation)
     {
+        if(_inUseDeck.Count == 0) ShuffleDeck();
+        
         GameObject dealtCard = Instantiate(_inUseDeck[0]);
         dealtCard.transform.position = transform.position;
         _inUseDeck.RemoveAt(0);
@@ -31,6 +33,8 @@ public class CardTracker : MonoBehaviour
 
     public Card DealFaceDownCard(Vector3 position, Quaternion rotation)
     {
+        if(_inUseDeck.Count == 0) ShuffleDeck();
+        
         GameObject dealtCard = Instantiate(_inUseDeck[0]);
         dealtCard.transform.position = transform.position;
         dealtCard.transform.Rotate(new Vector3(180f, 0f));
@@ -38,7 +42,7 @@ public class CardTracker : MonoBehaviour
 
         Card card = dealtCard.GetComponent<Card>();
         card.CardPlayed(position, rotation);
-        
+
         return card;
     }
 
